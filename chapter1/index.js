@@ -61,7 +61,19 @@ app.get('/contact', (req, res)=>{
 })
 
 app.get('/github', (req, res)=>{
-    res.json(profileData)
+  // const data = [
+  //   {id:1, name:"Aman"},
+  //   {id:2, name:"Amir"},
+  //   {id:3, name:"Neeraj"},
+  //   {id:4, name:"Rishi"},
+  // ]
+  // if (req.query.search) {
+  //   console.log(req.query.search)
+  //   const filter = data.filter(item=>item.name.toLowerCase().includes(req.query.search));
+  //   res.send(filter);
+  //   return;
+  // }
+  res.json(profileData);
 })
 
 // Here, it listens the frontend request till the server is running/ reload.
