@@ -2,19 +2,34 @@
 
 //1st approach in db folder.
 // require('dotenv').config({path: "./env"})
-// import dotenv from 'dotenv';
-// // in backend file extensions are mandatory
-// import connectDB from './db/index.js';
+import dotenv from 'dotenv';
+// in backend file extensions are mandatory
+import connectDB from './db/index.js';
+import { app, port } from './app.js';
 
-// dotenv.config({path: './env'});
+dotenv.config({path: './env'});
 
-// connectDB();
+// the database return a Promise where we use .then.catch
+connectDB()
+    .then(()=>{
+        app.on("error", (error)=>{
+            console.log("Error with express", error);
+            throw error
+        });
+        // app.get("/", (req, res)=>{
+        //     res.send('<h1>Hello World!!<h1/>')
+        // });
+        app.listen(port, ()=>{
+            console.log(`Server is running at Port: ${port}`);
+        });
+    })
+    .catch(err=>{console.log("MONGO DB connection failed!!", err)});
 
 
 
 
 
- //2nd approach write mongoose and express all inside index.js
+/* //2nd approach write mongoose and express all inside index.js
 import dotenv from 'dotenv';
 dotenv.config({path: "/env"});
 import mongoose from 'mongoose';
@@ -35,7 +50,7 @@ const app = express();
             console.log(`App is running on port: ${process.env.PORT}`)
         })
     } catch (error) {
-        console.log("MONGODB connect error ",error)
+        console.log(error)
     }
-})() 
+})() */
 
