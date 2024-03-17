@@ -8,6 +8,6 @@ class ApiResponse {
         // set status code // Read more about status code memo
         this.success = statusCode < 400
     }
-}
+};
 
 export {ApiResponse};

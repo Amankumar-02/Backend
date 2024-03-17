@@ -1,4 +1,4 @@
-// Here we create a custom/ wrapper function
+// Here we create a custom/ wrapper function to communicate with database
 
 // 1. By try and catch
 const asyncHandler = (requestHandler)=>{
@@ -8,6 +8,7 @@ const asyncHandler = (requestHandler)=>{
     }
 };
 
+export {asyncHandler};
 
 
 /* // 2. By Promises High Order Function ==> take a function and return a function
@@ -24,4 +25,4 @@ const asyncHandler = (fn)=> async(req, res, next)=>{
     }
 } */
 
-export {asyncHandler};
+// export {asyncHandler};
