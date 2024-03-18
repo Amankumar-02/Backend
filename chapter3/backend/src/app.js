@@ -29,6 +29,16 @@ app.use(express.static("public"));
 // only server can read or write the cookies
 app.use(cookieParser());
 
+
+// routes import
+import userRouter from './routes/user.routes.js';
+
+// routes declaration
+app.use("/api/v1/users", userRouter);
+//https://localhost:8000/api/v1/users/register
+//https://localhost:8000/api/v1/users/login
+
+
 export {app, port};
 
 

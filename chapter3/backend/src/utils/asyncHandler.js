@@ -1,11 +1,10 @@
 // Here we create a custom/ wrapper function to communicate with database
 
 // 1. By try and catch
-const asyncHandler = (requestHandler)=>{
-    (req, res, next)=>{
+const asyncHandler = (requestHandler)=>
+     (req, res, next)=>{
         Promise.resolve(requestHandler(req, res, next))
         .catch(err=>next(err));
-    }
 };
 
 export {asyncHandler};
