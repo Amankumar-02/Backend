@@ -54,9 +54,10 @@ const userSchema = new Schema({
 // mongoose middleware pre hook
 // pre methods ==> validate, save, remove, updateOne, deleteOne, init
 // only function callBack is work because of .this
-userSchema.pre("save", async function(err, req, res, next){
+userSchema.pre("save", async function(next){
     // if () is a syntax
-    if(this.isModified("password")){return next()};
+    if(!this.isModified("password")) return next();
+    
     this.password = await bcrypt.hash(this.password, 10) //10 rounds
     next()
 });

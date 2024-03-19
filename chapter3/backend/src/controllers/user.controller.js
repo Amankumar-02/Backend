@@ -35,7 +35,7 @@ const registerUser = asyncHandler( async (req, res)=>{
     }
 
     // check the unique userName & email using db
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [{userName}, {email}]
     })
     // console.log("existedUser", existedUser)
@@ -46,7 +46,13 @@ const registerUser = asyncHandler( async (req, res)=>{
     // check for coverImg and avatar using multer
     // console.log("req.files", req.files);
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length>0){
+        coverImageLocalPath = req.files.coverImage[0].path;
+    }
+
     if(!avatarLocalPath){
         throw new ApiError(400, `Avatar file is required.`)
     };
@@ -76,7 +82,7 @@ const registerUser = asyncHandler( async (req, res)=>{
         throw new ApiError(500, `Something went wrong while registering the user.`)
     }
 
-    console.log(`Email: ${email}, UserName: ${userName}, FullName: ${fullName}, Password: ${password}`);
+    // console.log(`Email: ${email}, UserName: ${userName}, FullName: ${fullName}, Password: ${password}`);
 
     // return response
     return res.status(201).json(
