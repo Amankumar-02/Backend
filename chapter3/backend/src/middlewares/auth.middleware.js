@@ -1,10 +1,10 @@
 //  this only check the logined user is present or not
 // custom middleware
 
-import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from 'jsonwebtoken';
+import { User } from "../models/user.models.js";
 
 // here if we does not we res, replace it with _
 export const verifyJWT = asyncHandler(async(req, _, next)=>{
