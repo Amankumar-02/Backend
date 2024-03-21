@@ -4,6 +4,7 @@ import {User} from '../models/user.models.js';
 import {uploadOnCloudinary} from '../utils/cloudinary.js';
 import {ApiResponse} from '../utils/ApiResponse.js';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 
 //custom method for access and refresh token
@@ -388,4 +389,56 @@ const getUserChannelProfile = asyncHandler(async(req, res)=>{
     return res.status(200).json(new ApiResponse(200, channel[0], "User Channel Fetched Successfully."))
 })
 
-export {registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails ,updateUserAvatar, updateUserCoverImage, getUserChannelProfile};
+//get watch history
+const getWatchHistory = asyncHandler(async(req, res)=>{
+    const user = await User.aggregate([
+        {
+            $match: {
+                _id: new mongoose.Types.ObjectId(req.user?._id)
+            }
+        },
+        {
+            $lookup: {
+                from : "videos",
+                localField : "watchHistory",
+                foreignField : "_id",
+                as: "watchHistory",
+                // for sub pipe line
+                pipeline:[
+                    {
+                        $lookup: {
+                            from : "users",
+                            localField : "owner",
+                            foreignField : "_id",
+                            as : "owner",
+                            pipeline: [
+                                {
+                                    $project:{
+                                        userName:1,
+                                        fullName:1,
+                                        avatar:1,
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    // pass the converted array to object ==> to owner
+                    {
+                        $addFields:{
+                            owner:{
+                                $first: "$owner"
+                            }
+                        }
+                    }
+                ],
+            },
+        }
+    ]);
+    // console.log(user);
+    if(!user?.length){
+        throw new ApiError(404, "Watch history in not present")
+    };
+    return res.status(200).json(new ApiResponse(200, user[0].watchHistory, "Watch history fetched successfully"))
+})
+
+export {registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails ,updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatchHistory};
